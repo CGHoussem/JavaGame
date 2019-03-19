@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 
 /**
  *
- * @author mega-pc
+ * @author Houssem Ben Mabrouk
  */
 public class Window extends Canvas {
     
