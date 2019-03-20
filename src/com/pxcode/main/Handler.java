@@ -17,6 +17,7 @@
  */
 package com.pxcode.main;
 
+import com.pxcode.utility.GameObject;
 import java.awt.Graphics;
 import java.util.LinkedList;
 

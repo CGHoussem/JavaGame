@@ -15,8 +15,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.pxcode.main;
+package com.pxcode.utility;
 
+import com.pxcode.utility.ID;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
@@ -26,11 +27,11 @@ import java.awt.Rectangle;
  */
 public abstract class GameObject {
     
-    protected int x, y;
+    protected float x, y;
     protected ID id;
-    protected int velocityX, velocityY;
+    protected float velocityX, velocityY;
     
-    public GameObject(int x, int y, ID id){
+    public GameObject(float x, float y, ID id){
         this.x = x;
         this.y = y;
         this.id = id;
@@ -40,35 +41,35 @@ public abstract class GameObject {
     public abstract void render(Graphics g);
     public abstract Rectangle getBounds();
     
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 
-    public int getVelocityX() {
+    public float getVelocityX() {
         return velocityX;
     }
 
-    public void setVelocityX(int velocityX) {
+    public void setVelocityX(float velocityX) {
         this.velocityX = velocityX;
     }
 
-    public int getVelocityY() {
+    public float getVelocityY() {
         return velocityY;
     }
 
-    public void setVelocityY(int velocityY) {
+    public void setVelocityY(float velocityY) {
         this.velocityY = velocityY;
     }
 

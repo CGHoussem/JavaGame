@@ -18,9 +18,9 @@ package com.pxcode.entities;
 
 import com.pxcode.main.Game;
 import com.pxcode.utility.GameObject;
-import com.pxcode.gui.HUD;
 import com.pxcode.main.Handler;
 import com.pxcode.utility.ID;
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -30,56 +30,55 @@ import java.awt.Rectangle;
  *
  * @author Houssem Ben Mabrouk
  */
-public class Player extends GameObject {
+public class Trail extends GameObject {
 
-    Handler handler;
+    private float alpha = 1;
+    private Handler handler;
+    private Color color;
 
-    public Player(float x, float y, ID id, Handler handler) {
+    private int width, height;
+    private float life;
+
+    public Trail(float x, float y, ID id, Color color, int width, int height, float life, Handler handler) {
         super(x, y, id);
+        this.color = color;
         this.handler = handler;
+        this.width = width;
+        this.height = height;
+        this.life = life;
     }
 
     @Override
     public void tick() {
-        x += velocityX;
-        y += velocityY;
-
-        x = Game.clamp(x, 0, Game.WIDTH - 36);
-        y = Game.clamp(y, 0, Game.HEIGHT - 60);
-
-        collision();
+        if (alpha > life) {
+            alpha -= life - 0.001;
+            width -= 1;
+            height -= 1;
+        } else {
+            handler.removeObject(this);
+        }
     }
 
     @Override
     public void render(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
+        g2d.setComposite(makeTransparent(alpha));
 
-        if (Game.isDebug) {
-            g.setColor(Color.white);
-            g2d.draw(getBounds());
-        } else {
-            g.setColor(Color.white);
-            g.fillRect((int) x, (int) y, 32, 32);
+        if (!Game.isDebug) {
+            g.setColor(color);
+            g.fillRect((int)x, (int)y, width, height);
         }
+
+        g2d.setComposite(makeTransparent(1));
     }
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle((int) x, (int) y, 32, 32);
+        return null;
     }
 
-    private void collision() {
-        for (int i = 0; i < handler.objects.size(); i++) {
-            GameObject tempObject = handler.objects.get(i);
-
-            ID id = tempObject.getId();
-            if (id == ID.BasicEnemy || id == ID.FastEnemy || id == ID.SmartEnemy) {
-                if (getBounds().intersects(tempObject.getBounds())) {
-                    HUD.HEALTH--;
-                }
-            }
-
-        }
+    private AlphaComposite makeTransparent(float alpha) {
+        return (AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
     }
 
 }

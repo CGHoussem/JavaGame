@@ -1,68 +1,67 @@
 package com.pxcode.main;
 
+import com.pxcode.utility.KeyInput;
+import com.pxcode.utility.ID;
+import com.pxcode.gui.HUD;
 import com.pxcode.entities.Player;
-import com.pxcode.entities.BasicEnemy;
+import com.pxcode.utility.Spawn;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
-import java.util.Random;
 
 /**
  *
  * @author Houssem Ben Mabrouk
  */
-public class Game extends Canvas implements Runnable{
-    
+public class Game extends Canvas implements Runnable {
+
     public static final int WIDTH = 640, HEIGHT = WIDTH / 12 * 9;
-    
+
     private Thread thread;
     private boolean running = false;
-    
-    private Random r;
+    public static boolean isDebug = false;
+
     private Handler handler;
     private HUD hud;
-    
-    public static boolean isDebug = false;
-    
-    public Game(){
+    private Spawn spawner;
+
+    public Game() {
         handler = new Handler();
         this.addKeyListener(new KeyInput(handler));
-        
+
         new Window(WIDTH, HEIGHT, "Game Title", this);
-        
+
         hud = new HUD();
-        
-        r = new Random();
-        
-        handler.addObject(new Player(WIDTH/2-32, HEIGHT/2-32, ID.Player, handler));
-        for (int i = 0; i < 5; i++)
-            handler.addObject(new BasicEnemy(r.nextInt(WIDTH-32), r.nextInt(HEIGHT-32), ID.BasicEnemy, handler));
+        spawner = new Spawn(handler, hud);
+
+        handler.addObject(new Player(WIDTH / 2 - 32, HEIGHT / 2 - 32, ID.Player, handler));
     }
-    
-    public synchronized void start(){
+
+    public synchronized void start() {
         thread = new Thread(this);
         thread.start();
         running = true;
     }
-    
-    public synchronized void stop(){
+
+    public synchronized void stop() {
         try {
             thread.join();
             running = false;
-        } catch (InterruptedException e){
+        } catch (InterruptedException e) {
             System.out.println("Error in stop(): " + e.getMessage());
         }
     }
-    
-    public static int clamp(int var, int min, int max){
-        if (var > max)
+
+    public static float clamp(float var, float min, float max) {
+        if (var > max) {
             var = max;
-        else if (var < min)
+        } else if (var < min) {
             var = min;
-       return var;
+        }
+        return var;
     }
-    
+
     @Override
     public void run() {
         this.requestFocus();
@@ -72,19 +71,20 @@ public class Game extends Canvas implements Runnable{
         double delta = 0;
         long timer = System.currentTimeMillis();
         int frames = 0;
-        while (running){
+        while (running) {
             long now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
-            while (delta >= 1){
+            while (delta >= 1) {
                 tick();
                 delta--;
             }
-            if (running)
+            if (running) {
                 render();
+            }
             frames++;
-            
-            if (System.currentTimeMillis() - timer > 1000){
+
+            if (System.currentTimeMillis() - timer > 1000) {
                 timer += 1000;
                 System.out.println("FPS: " + frames);
                 frames = 0;
@@ -92,32 +92,33 @@ public class Game extends Canvas implements Runnable{
         }
         stop();
     }
-    
-    private void tick(){
+
+    private void tick() {
         handler.tick();
         hud.tick();
+        spawner.tick();
     }
-    
-    private void render(){
+
+    private void render() {
         BufferStrategy bs = this.getBufferStrategy();
-        if (bs == null){
+        if (bs == null) {
             this.createBufferStrategy(3);
             return;
         }
-        
+
         Graphics g = bs.getDrawGraphics();
-        
+
         g.setColor(Color.black);
         g.fillRect(0, 0, WIDTH, HEIGHT);
-        
+
         handler.render(g);
         hud.render(g);
-        
+
         g.dispose();
         bs.show();
     }
-    
-    public static void main(String args[]){
+
+    public static void main(String args[]) {
         new Game();
     }
 

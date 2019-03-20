@@ -17,10 +17,9 @@
 package com.pxcode.entities;
 
 import com.pxcode.main.Game;
-import com.pxcode.main.GameObject;
+import com.pxcode.utility.GameObject;
 import com.pxcode.main.Handler;
-import com.pxcode.main.ID;
-import  com.pxcode.main.Trail;
+import com.pxcode.utility.ID;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -36,7 +35,7 @@ public class BasicEnemy extends GameObject{
     private Random r;
     private Handler handler;
     
-    public BasicEnemy(int x, int y, ID id, Handler handler) {
+    public BasicEnemy(float x, float y, ID id, Handler handler) {
         super(x, y, id);
         this.handler = handler;
         
@@ -66,13 +65,13 @@ public class BasicEnemy extends GameObject{
             g2d.draw(getBounds());
         } else {
             g.setColor(Color.red);
-            g.fillRect(x, y, 16, 16);
+            g.fillRect((int)x, (int)y, 16, 16);
         }
     }
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle(x, y, 16, 16);
+        return new Rectangle((int)x, (int)y, 16, 16);
     }
     
 }
