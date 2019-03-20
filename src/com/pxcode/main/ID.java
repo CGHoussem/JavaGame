@@ -23,5 +23,5 @@ package com.pxcode.main;
  */
 public enum ID {
     Player(),
-    Enemy();
+    BasicEnemy();
 }

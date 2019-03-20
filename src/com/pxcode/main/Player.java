@@ -31,7 +31,8 @@ public class Player extends GameObject{
 
     @Override
     public void tick() {
-        velocityX += 1;
+        x += velocityX;
+        y += velocityY;
     }
 
     @Override
