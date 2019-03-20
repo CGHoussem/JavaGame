@@ -18,15 +18,23 @@ package com.pxcode.main;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Random;
 
 /**
  *
  * @author Houssem Ben Mabrouk
  */
-public class Player extends GameObject{
+public class BasicEnemy extends GameObject{
 
-    public Player(int x, int y, ID id) {
+    private Random r;
+    
+    public BasicEnemy(int x, int y, ID id) {
         super(x, y, id);
+        
+        r = new Random();
+        
+        velocityX = r.nextInt(3)+3;
+        velocityY = r.nextInt(3)+3;
     }
 
     @Override
@@ -34,16 +42,14 @@ public class Player extends GameObject{
         x += velocityX;
         y += velocityY;
         
-        x = Game.clamp(x, 0, Game.WIDTH - 36);
-        y = Game.clamp(y, 0, Game.HEIGHT - 60);
+        if (x <= 0 || x >= Game.WIDTH - 16) velocityX *= -1;
+        if (y <= 0 || y >= Game.HEIGHT - 40) velocityY *= -1;
     }
 
     @Override
     public void render(Graphics g) {
-        g.setColor(Color.white);
-        g.fillRect(x, y, 32, 32);
+        g.setColor(Color.red);
+        g.fillRect(x, y, 16, 16);
     }
-    
-    
     
 }

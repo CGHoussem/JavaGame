@@ -23,27 +23,22 @@ import java.awt.Graphics;
  *
  * @author Houssem Ben Mabrouk
  */
-public class Player extends GameObject{
-
-    public Player(int x, int y, ID id) {
-        super(x, y, id);
-    }
-
-    @Override
-    public void tick() {
-        x += velocityX;
-        y += velocityY;
+public class HUD {
+    
+    public static int HEALTH = 100;
+    
+    public void tick(){
         
-        x = Game.clamp(x, 0, Game.WIDTH - 36);
-        y = Game.clamp(y, 0, Game.HEIGHT - 60);
+        HEALTH = Game.clamp(HEALTH, 0, 100);
     }
-
-    @Override
-    public void render(Graphics g) {
+    
+    public void render(Graphics g){
+        g.setColor(Color.gray);
+        g.fillRect(15, 15, 200, 32);
+        g.setColor(Color.green);
+        g.fillRect(15, 15, HEALTH * 2, 32);
         g.setColor(Color.white);
-        g.fillRect(x, y, 32, 32);
+        g.drawRect(15, 15, 200, 32);
     }
-    
-    
     
 }

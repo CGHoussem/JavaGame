@@ -37,20 +37,10 @@ public class KeyInput extends KeyAdapter {
         for (int i = 0; i < handler.objects.size(); i++) {
             GameObject tempObject = handler.objects.get(i);
             if (tempObject.id == ID.Player) {
-                switch (key) {
-                    case KeyEvent.VK_Z:
-                        tempObject.setVelocityY(-5);
-                        break;
-                    case KeyEvent.VK_S:
-                        tempObject.setVelocityY(5);
-                        break;
-                    case KeyEvent.VK_Q:
-                        tempObject.setVelocityX(-5);
-                        break;
-                    case KeyEvent.VK_D:
-                        tempObject.setVelocityX(5);
-                        break;
-                }
+                if (key == KeyEvent.VK_Z) tempObject.setVelocityY(-5);
+                if (key == KeyEvent.VK_S) tempObject.setVelocityY(5);
+                if (key == KeyEvent.VK_Q) tempObject.setVelocityX(-5);
+                if (key == KeyEvent.VK_D) tempObject.setVelocityX(5);
             }
         }
 
@@ -62,18 +52,14 @@ public class KeyInput extends KeyAdapter {
         for (int i = 0; i < handler.objects.size(); i++) {
             GameObject tempObject = handler.objects.get(i);
             if (tempObject.id == ID.Player) {
-                switch (key) {
-                    case KeyEvent.VK_Z:
-                    case KeyEvent.VK_S:
-                        tempObject.setVelocityY(0);
-                        break;
-                    case KeyEvent.VK_Q:
-                    case KeyEvent.VK_D:
-                        tempObject.setVelocityX(0);
-                        break;
-                }
+                if (key == KeyEvent.VK_Z || key == KeyEvent.VK_S) 
+                    tempObject.setVelocityY(0);
+                if (key == KeyEvent.VK_Q || key == KeyEvent.VK_D) 
+                    tempObject.setVelocityX(0);
             }
         }
+        
+        if (key == KeyEvent.VK_ESCAPE) System.exit(0);
     }
 
 }
