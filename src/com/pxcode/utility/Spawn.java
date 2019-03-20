@@ -16,9 +16,10 @@
  */
 package com.pxcode.utility;
 
-import com.pxcode.entities.BasicEnemy;
-import com.pxcode.entities.FastEnemy;
-import com.pxcode.entities.SmartEnemy;
+import com.pxcode.entity.BasicEnemy;
+import com.pxcode.entity.BossEnemy;
+import com.pxcode.entity.FastEnemy;
+import com.pxcode.entity.SmartEnemy;
 import com.pxcode.gui.HUD;
 import com.pxcode.main.Game;
 import com.pxcode.main.Handler;
@@ -41,27 +42,44 @@ public class Spawn {
         this.hud = hud;
 
         handler.addObject(new BasicEnemy(r.nextInt(Game.WIDTH - 32), r.nextInt(Game.HEIGHT - 32), ID.BasicEnemy, handler));
-        handler.addObject(new BasicEnemy(r.nextInt(Game.WIDTH - 32), r.nextInt(Game.HEIGHT - 32), ID.BasicEnemy, handler));
-        handler.addObject(new BasicEnemy(r.nextInt(Game.WIDTH - 32), r.nextInt(Game.HEIGHT - 32), ID.BasicEnemy, handler));
+
     }
 
     public void tick() {
         scoreKeep++;
 
-        if (scoreKeep >= 500) {
+        if (scoreKeep >= 250) {
             scoreKeep = 0;
             hud.setLevel(hud.getLevel() + 1);
 
             switch (hud.getLevel()) {
                 case 2:
-                    handler.addObject(new FastEnemy(r.nextInt(Game.WIDTH - 64), r.nextInt(Game.HEIGHT - 64), ID.FastEnemy, handler));
+                    handler.addObject(new FastEnemy(r.nextInt(Game.WIDTH - 64), r.nextInt(Game.HEIGHT - 120), ID.FastEnemy, handler));
                     break;
                 case 3:
-                    handler.addObject(new BasicEnemy(r.nextInt(Game.WIDTH - 32), r.nextInt(Game.HEIGHT - 32), ID.BasicEnemy, handler));
-                    handler.addObject(new FastEnemy(r.nextInt(Game.WIDTH - 64), r.nextInt(Game.HEIGHT - 64), ID.FastEnemy, handler));
+                    handler.addObject(new BasicEnemy(r.nextInt(Game.WIDTH - 64), r.nextInt(Game.HEIGHT - 120), ID.BasicEnemy, handler));
                     break;
                 case 4:
-                    handler.addObject(new SmartEnemy(r.nextInt(Game.WIDTH - 64), r.nextInt(Game.HEIGHT - 64), ID.SmartEnemy, handler));
+                    handler.addObject(new FastEnemy(r.nextInt(Game.WIDTH - 64), r.nextInt(Game.HEIGHT - 120), ID.FastEnemy, handler));
+                    break;
+                case 5:
+                    handler.addObject(new SmartEnemy(r.nextInt(Game.WIDTH - 64), r.nextInt(Game.HEIGHT - 120), ID.SmartEnemy, handler));
+                    break;
+                case 6:
+                    handler.addObject(new FastEnemy(r.nextInt(Game.WIDTH - 64), r.nextInt(Game.HEIGHT - 120), ID.FastEnemy, handler));
+                    break;
+                case 7:
+                    handler.addObject(new BasicEnemy(r.nextInt(Game.WIDTH - 64), r.nextInt(Game.HEIGHT - 120), ID.BasicEnemy, handler));
+                    break;
+                case 8:
+                    handler.addObject(new BasicEnemy(r.nextInt(Game.WIDTH - 64), r.nextInt(Game.HEIGHT - 120), ID.BasicEnemy, handler));
+                    break;
+                case 9:
+                    handler.addObject(new SmartEnemy(r.nextInt(Game.WIDTH - 64), r.nextInt(Game.HEIGHT - 120), ID.SmartEnemy, handler));
+                    break;
+                case 10:
+                    handler.clearEnemies();
+                    handler.addObject(new BossEnemy(Game.WIDTH * 0.5f - 48, -192, ID.BossEnemy1, handler));
                     break;
             }
 

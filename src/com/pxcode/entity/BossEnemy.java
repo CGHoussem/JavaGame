@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.pxcode.entities;
+package com.pxcode.entity;
 
 import com.pxcode.main.Game;
 import com.pxcode.utility.GameObject;
@@ -30,48 +30,64 @@ import java.util.Random;
  *
  * @author Houssem Ben Mabrouk
  */
-public class BasicEnemy extends GameObject{
+public class BossEnemy extends GameObject {
 
-    private Random r;
     private Handler handler;
-    
-    public BasicEnemy(float x, float y, ID id, Handler handler) {
+    Random r = new Random();
+
+    private int timer = 100;
+    private int timer2 = 50;
+
+    public BossEnemy(float x, float y, ID id, Handler handler) {
         super(x, y, id);
         this.handler = handler;
-        
-        r = new Random();
-        
-        velocityX = r.nextInt(3)+3;
-        velocityY = r.nextInt(3)+3;
+
+        velocityX = 0;
+        velocityY = 2;
     }
 
     @Override
     public void tick() {
         x += velocityX;
         y += velocityY;
-        
-        if (x <= 0 || x >= Game.WIDTH - 16) velocityX *= -1;
-        if (y <= 0 || y >= Game.HEIGHT - 40) velocityY *= -1;
-        
-        handler.addObject(new Trail(x, y, ID.Trail, Color.red, 16, 16, (float) 0.1, handler));
+
+        if (timer <= 0) {
+            velocityY = 0;
+            timer2--;
+        } else {
+            timer--;
+        }
+        if (timer2 <= 0) {
+            if (velocityX == 0) {
+                velocityX = 3;
+            }
+            int spawn = r.nextInt(10);
+            if (spawn == 0) {
+                handler.addObject(new BossEnemyBullet(x + 48, y + 96, ID.BasicEnemy, handler));
+            }
+        }
+
+        if (x <= 0 || x >= Game.WIDTH - 96) {
+            velocityX *= -1;
+        }
     }
 
     @Override
     public void render(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-               
-        if (Game.isDebug){
+
+        if (Game.isDebug) {
             g.setColor(Color.red);
             g2d.draw(getBounds());
         } else {
             g.setColor(Color.red);
-            g.fillRect((int)x, (int)y, 16, 16);
+            g.fillRect((int) x, (int) y, 96, 96);
         }
     }
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle((int)x, (int)y, 16, 16);
+        return new Rectangle((int) x, (int) y, 96, 96);
     }
-    
+
 }

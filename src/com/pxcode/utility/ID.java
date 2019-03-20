@@ -26,5 +26,6 @@ public enum ID {
     BasicEnemy,
     FastEnemy,
     SmartEnemy,
+    BossEnemy1,
     Trail;
 }

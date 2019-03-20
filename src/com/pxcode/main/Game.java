@@ -3,7 +3,7 @@ package com.pxcode.main;
 import com.pxcode.utility.KeyInput;
 import com.pxcode.utility.ID;
 import com.pxcode.gui.HUD;
-import com.pxcode.entities.Player;
+import com.pxcode.entity.Player;
 import com.pxcode.utility.Spawn;
 import java.awt.Canvas;
 import java.awt.Color;

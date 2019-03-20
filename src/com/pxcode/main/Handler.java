@@ -18,6 +18,7 @@
 package com.pxcode.main;
 
 import com.pxcode.utility.GameObject;
+import com.pxcode.utility.ID;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
@@ -26,29 +27,45 @@ import java.util.LinkedList;
  * @author Houssem Ben Mabrouk
  */
 public class Handler {
-    
+
     public LinkedList<GameObject> objects = new LinkedList<>();
-    
-    public void tick(){
-        for (int i = 0; i < objects.size(); i++){
+
+    public void tick() {
+        for (int i = 0; i < objects.size(); i++) {
             GameObject tempObject = objects.get(i);
             tempObject.tick();
         }
     }
-    
-    public void render(Graphics g){
-         for (int i = 0; i < objects.size(); i++){
+
+    public void render(Graphics g) {
+        for (int i = 0; i < objects.size(); i++) {
             GameObject tempObject = objects.get(i);
             tempObject.render(g);
         }
     }
-    
-    public void addObject(GameObject object){
+
+    public void addObject(GameObject object) {
         this.objects.add(object);
     }
-    
-    public void removeObject(GameObject object){
+
+    public void removeObject(GameObject object) {
         this.objects.remove(object);
     }
-    
+
+    public void clearEnemies() {
+        LinkedList<GameObject> enemies = new LinkedList<>();
+        for (int i = 0; i < objects.size(); i++) {
+            GameObject tempObject = objects.get(i);
+            if (tempObject.getId() != ID.Player) {
+                enemies.add(tempObject);
+            }
+        }
+
+        for (int i = 0; i < enemies.size(); i++) {
+            GameObject tempObject = enemies.get(i);
+            objects.remove(tempObject);
+        }
+
+    }
+
 }

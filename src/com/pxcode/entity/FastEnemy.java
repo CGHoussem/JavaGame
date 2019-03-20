@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.pxcode.entities;
+package com.pxcode.entity;
 
 import com.pxcode.main.Game;
 import com.pxcode.utility.GameObject;
@@ -24,58 +24,47 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.Random;
 
 /**
  *
  * @author Houssem Ben Mabrouk
  */
-public class SmartEnemy extends GameObject {
+public class FastEnemy extends GameObject{
 
+    private Random r;
     private Handler handler;
-    private GameObject player;
-
-    public SmartEnemy(float x, float y, ID id, Handler handler) {
+    
+    public FastEnemy(float x, float y, ID id, Handler handler) {
         super(x, y, id);
         this.handler = handler;
-
-        for (int i = 0; i < handler.objects.size(); i++) {
-            if (handler.objects.get(i).getId() == ID.Player) {
-                player = handler.objects.get(i);
-            }
-        }
+        
+        r = new Random();
+        
+        velocityX = r.nextInt(4)+3;
+        velocityY = r.nextInt(9)+4;
     }
 
     @Override
     public void tick() {
         x += velocityX;
         y += velocityY;
-
-        float diffX = x - player.getX() - 16;
-        float diffY = y - player.getY() - 16;
-        float distance = (float) Math.sqrt(Math.pow(x - player.getX(), 2) + Math.pow(y - player.getY(), 2));
-
-        velocityX = (float) ((-1 / distance) * diffX);
-        velocityY = (float) ((-1 / distance) * diffY);
-
-        if (x <= 0 || x >= Game.WIDTH - 16) {
-            velocityX *= -1;
-        }
-        if (y <= 0 || y >= Game.HEIGHT - 40) {
-            velocityY *= -1;
-        }
-
-        handler.addObject(new Trail(x, y, ID.Trail, Color.green, 16, 16, (float) 0.1, handler));
+        
+        if (x <= 0 || x >= Game.WIDTH - 16) velocityX *= -1;
+        if (y <= 0 || y >= Game.HEIGHT - 40) velocityY *= -1;
+        
+        handler.addObject(new Trail(x, y, ID.Trail, Color.magenta, 16, 16, (float) 0.1, handler));
     }
 
     @Override
     public void render(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-
-        if (Game.isDebug) {
-            g.setColor(Color.green);
+               
+        if (Game.isDebug){
+            g.setColor(Color.magenta);
             g2d.draw(getBounds());
         } else {
-            g.setColor(Color.green);
+            g.setColor(Color.magenta);
             g.fillRect((int)x, (int)y, 16, 16);
         }
     }
@@ -84,5 +73,5 @@ public class SmartEnemy extends GameObject {
     public Rectangle getBounds() {
         return new Rectangle((int)x, (int)y, 16, 16);
     }
-
+    
 }

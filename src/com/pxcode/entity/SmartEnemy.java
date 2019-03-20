@@ -14,11 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.pxcode.entities;
+package com.pxcode.entity;
 
 import com.pxcode.main.Game;
 import com.pxcode.utility.GameObject;
-import com.pxcode.gui.HUD;
 import com.pxcode.main.Handler;
 import com.pxcode.utility.ID;
 import java.awt.Color;
@@ -30,13 +29,20 @@ import java.awt.Rectangle;
  *
  * @author Houssem Ben Mabrouk
  */
-public class Player extends GameObject {
+public class SmartEnemy extends GameObject {
 
-    Handler handler;
+    private Handler handler;
+    private GameObject player;
 
-    public Player(float x, float y, ID id, Handler handler) {
+    public SmartEnemy(float x, float y, ID id, Handler handler) {
         super(x, y, id);
         this.handler = handler;
+
+        for (int i = 0; i < handler.objects.size(); i++) {
+            if (handler.objects.get(i).getId() == ID.Player) {
+                player = handler.objects.get(i);
+            }
+        }
     }
 
     @Override
@@ -44,10 +50,21 @@ public class Player extends GameObject {
         x += velocityX;
         y += velocityY;
 
-        x = Game.clamp(x, 0, Game.WIDTH - 36);
-        y = Game.clamp(y, 0, Game.HEIGHT - 60);
+        float diffX = x - player.getX() - 16;
+        float diffY = y - player.getY() - 16;
+        float distance = (float) Math.sqrt(Math.pow(x - player.getX(), 2) + Math.pow(y - player.getY(), 2));
 
-        collision();
+        velocityX = (float) ((-1 / distance) * diffX);
+        velocityY = (float) ((-1 / distance) * diffY);
+
+        if (x <= 0 || x >= Game.WIDTH - 16) {
+            velocityX *= -1;
+        }
+        if (y <= 0 || y >= Game.HEIGHT - 40) {
+            velocityY *= -1;
+        }
+
+        handler.addObject(new Trail(x, y, ID.Trail, Color.green, 16, 16, (float) 0.1, handler));
     }
 
     @Override
@@ -55,31 +72,17 @@ public class Player extends GameObject {
         Graphics2D g2d = (Graphics2D) g;
 
         if (Game.isDebug) {
-            g.setColor(Color.white);
+            g.setColor(Color.green);
             g2d.draw(getBounds());
         } else {
-            g.setColor(Color.white);
-            g.fillRect((int) x, (int) y, 32, 32);
+            g.setColor(Color.green);
+            g.fillRect((int)x, (int)y, 16, 16);
         }
     }
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle((int) x, (int) y, 32, 32);
-    }
-
-    private void collision() {
-        for (int i = 0; i < handler.objects.size(); i++) {
-            GameObject tempObject = handler.objects.get(i);
-
-            ID id = tempObject.getId();
-            if (id == ID.BasicEnemy || id == ID.FastEnemy || id == ID.SmartEnemy) {
-                if (getBounds().intersects(tempObject.getBounds())) {
-                    HUD.HEALTH--;
-                }
-            }
-
-        }
+        return new Rectangle((int)x, (int)y, 16, 16);
     }
 
 }

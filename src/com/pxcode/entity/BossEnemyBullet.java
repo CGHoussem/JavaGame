@@ -14,71 +14,65 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.pxcode.entities;
+package com.pxcode.entity;
 
 import com.pxcode.main.Game;
 import com.pxcode.utility.GameObject;
 import com.pxcode.main.Handler;
 import com.pxcode.utility.ID;
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.Random;
 
 /**
  *
  * @author Houssem Ben Mabrouk
  */
-public class Trail extends GameObject {
+public class BossEnemyBullet extends GameObject {
 
-    private float alpha = 1;
+    private Random r;
     private Handler handler;
-    private Color color;
 
-    private int width, height;
-    private float life;
-
-    public Trail(float x, float y, ID id, Color color, int width, int height, float life, Handler handler) {
+    public BossEnemyBullet(float x, float y, ID id, Handler handler) {
         super(x, y, id);
-        this.color = color;
         this.handler = handler;
-        this.width = width;
-        this.height = height;
-        this.life = life;
+
+        r = new Random();
+
+        velocityX = r.nextInt(10) - 5;
+        velocityY = 5;
     }
 
     @Override
     public void tick() {
-        if (alpha > life) {
-            alpha -= life - 0.001;
-            width -= 1;
-            height -= 1;
-        } else {
+        x += velocityX;
+        y += velocityY;
+
+        if (y >= Game.HEIGHT) {
             handler.removeObject(this);
         }
+
+        handler.addObject(new Trail(x, y, ID.Trail, Color.red, 16, 16, (float) 0.1, handler));
     }
 
     @Override
     public void render(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setComposite(makeTransparent(alpha));
 
-        if (!Game.isDebug) {
-            g.setColor(color);
-            g.fillRect((int)x, (int)y, width, height);
+        if (Game.isDebug) {
+            g.setColor(Color.red);
+            g2d.draw(getBounds());
+        } else {
+            g.setColor(Color.red);
+            g.fillRect((int) x, (int) y, 16, 16);
         }
-
-        g2d.setComposite(makeTransparent(1));
     }
 
     @Override
     public Rectangle getBounds() {
-        return null;
-    }
-
-    private AlphaComposite makeTransparent(float alpha) {
-        return (AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+        return new Rectangle((int) x, (int) y, 16, 16);
     }
 
 }
