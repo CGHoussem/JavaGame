@@ -14,10 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.pxcode.main;
+package com.pxcode.entities;
 
+import com.pxcode.main.Game;
+import com.pxcode.main.GameObject;
+import com.pxcode.main.Handler;
+import com.pxcode.main.ID;
+import  com.pxcode.main.Trail;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.util.Random;
 
 /**
@@ -27,9 +34,11 @@ import java.util.Random;
 public class BasicEnemy extends GameObject{
 
     private Random r;
+    private Handler handler;
     
-    public BasicEnemy(int x, int y, ID id) {
+    public BasicEnemy(int x, int y, ID id, Handler handler) {
         super(x, y, id);
+        this.handler = handler;
         
         r = new Random();
         
@@ -44,12 +53,26 @@ public class BasicEnemy extends GameObject{
         
         if (x <= 0 || x >= Game.WIDTH - 16) velocityX *= -1;
         if (y <= 0 || y >= Game.HEIGHT - 40) velocityY *= -1;
+        
+        handler.addObject(new Trail(x, y, ID.Trail, Color.red, 16, 16, (float) 0.1, handler));
     }
 
     @Override
     public void render(Graphics g) {
-        g.setColor(Color.red);
-        g.fillRect(x, y, 16, 16);
+        Graphics2D g2d = (Graphics2D) g;
+               
+        if (Game.isDebug){
+            g.setColor(Color.red);
+            g2d.draw(getBounds());
+        } else {
+            g.setColor(Color.red);
+            g.fillRect(x, y, 16, 16);
+        }
+    }
+
+    @Override
+    public Rectangle getBounds() {
+        return new Rectangle(x, y, 16, 16);
     }
     
 }

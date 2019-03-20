@@ -22,6 +22,7 @@ package com.pxcode.main;
  * @author Houssem Ben Mabrouk
  */
 public enum ID {
-    Player(),
-    BasicEnemy();
+    Player,
+    BasicEnemy,
+    Trail;
 }

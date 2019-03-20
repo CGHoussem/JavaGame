@@ -1,5 +1,7 @@
 package com.pxcode.main;
 
+import com.pxcode.entities.Player;
+import com.pxcode.entities.BasicEnemy;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -21,6 +23,8 @@ public class Game extends Canvas implements Runnable{
     private Handler handler;
     private HUD hud;
     
+    public static boolean isDebug = false;
+    
     public Game(){
         handler = new Handler();
         this.addKeyListener(new KeyInput(handler));
@@ -31,9 +35,9 @@ public class Game extends Canvas implements Runnable{
         
         r = new Random();
         
-        handler.addObject(new Player(WIDTH/2-32, HEIGHT/2-32, ID.Player));
-        for (int i = 0; i < 10; i++)
-            handler.addObject(new BasicEnemy(r.nextInt(WIDTH-16)+16, r.nextInt(HEIGHT-16)+16, ID.BasicEnemy));
+        handler.addObject(new Player(WIDTH/2-32, HEIGHT/2-32, ID.Player, handler));
+        for (int i = 0; i < 5; i++)
+            handler.addObject(new BasicEnemy(r.nextInt(WIDTH-32), r.nextInt(HEIGHT-32), ID.BasicEnemy, handler));
     }
     
     public synchronized void start(){

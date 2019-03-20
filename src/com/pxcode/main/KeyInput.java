@@ -43,7 +43,11 @@ public class KeyInput extends KeyAdapter {
                 if (key == KeyEvent.VK_D) tempObject.setVelocityX(5);
             }
         }
-
+        
+        if (key == KeyEvent.VK_ESCAPE) System.exit(0);
+        if (key == KeyEvent.VK_CONTROL) 
+            Game.isDebug = Game.isDebug ? false : true;
+        
     }
 
     public void keyReleased(KeyEvent e) {
@@ -59,7 +63,7 @@ public class KeyInput extends KeyAdapter {
             }
         }
         
-        if (key == KeyEvent.VK_ESCAPE) System.exit(0);
+
     }
 
 }
