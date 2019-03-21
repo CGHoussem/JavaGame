@@ -1,9 +1,8 @@
 package com.pxcode.main;
 
 import com.pxcode.utility.KeyInput;
-import com.pxcode.utility.ID;
 import com.pxcode.gui.HUD;
-import com.pxcode.entity.Player;
+import com.pxcode.utility.Menu;
 import com.pxcode.utility.Spawn;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -25,17 +24,27 @@ public class Game extends Canvas implements Runnable {
     private Handler handler;
     private HUD hud;
     private Spawn spawner;
+    private Menu menu;
+
+    public enum STATE {
+        Menu,
+        Help,
+        Game
+    };
+
+    public STATE gameState = STATE.Menu;
 
     public Game() {
         handler = new Handler();
+        menu = new Menu(this, handler);
         this.addKeyListener(new KeyInput(handler));
+        this.addMouseListener(menu);
 
         new Window(WIDTH, HEIGHT, "Game Title", this);
 
         hud = new HUD();
         spawner = new Spawn(handler, hud);
 
-        handler.addObject(new Player(WIDTH / 2 - 32, HEIGHT / 2 - 32, ID.Player, handler));
     }
 
     public synchronized void start() {
@@ -95,8 +104,14 @@ public class Game extends Canvas implements Runnable {
 
     private void tick() {
         handler.tick();
-        hud.tick();
-        spawner.tick();
+
+        if (gameState == STATE.Game) {
+            hud.tick();
+            spawner.tick();
+        } else if (gameState == STATE.Menu) {
+            menu.tick();
+        }
+
     }
 
     private void render() {
@@ -111,8 +126,12 @@ public class Game extends Canvas implements Runnable {
         g.setColor(Color.black);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
-        handler.render(g);
-        hud.render(g);
+        if (gameState == STATE.Game) {
+            handler.render(g);
+            hud.render(g);
+        } else if (gameState == STATE.Menu || gameState == STATE.Help) {
+            menu.render(g);
+        }
 
         g.dispose();
         bs.show();

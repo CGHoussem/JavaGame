@@ -42,7 +42,6 @@ public class Spawn {
         this.hud = hud;
 
         handler.addObject(new BasicEnemy(r.nextInt(Game.WIDTH - 32), r.nextInt(Game.HEIGHT - 32), ID.BasicEnemy, handler));
-
     }
 
     public void tick() {
